@@ -113,8 +113,7 @@ class Frame extends FramesAppModel {
 			'Language' => 'M17n.Language',
 		]);
 
-		$langs = $this->Language->getLanguage();
-		if (count($langs) > 1) {
+		if ($this->Language->isMultipleLang()) {
 			$belongsTo = array(
 				'belongsTo' => array(
 					'FramePublicLanguage' => array(
