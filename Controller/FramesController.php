@@ -72,12 +72,17 @@ class FramesController extends FramesAppController {
 			return $this->throwBadRequest();
 		}
 
-		$plugin = $this->Plugin->findByKey($data['Frame']['plugin_key']);
+		$plugin = $this->Plugin->cacheFindQuery('first', [
+			'recursive' => 0,
+			'conditions' => [
+				'Plugin.key' => $data['Frame']['plugin_key']
+			],
+		]);
 		if ($plugin) {
 			$pluginKey = $data['Frame']['plugin_key'];
-			if (Hash::get($plugin, 'Plugin.frame_add_action')) {
+			if (!empty($plugin['Plugin']['frame_add_action'])) {
 				list($controller, $action) = explode('/', $plugin['Plugin']['frame_add_action']);
-			} elseif (Hash::get($plugin, 'Plugin.default_setting_action')) {
+			} elseif (!empty($plugin['Plugin']['default_setting_action'])) {
 				list($controller, $action) = explode('/', $plugin['Plugin']['default_setting_action']);
 			} else {
 				return $this->redirect($this->request->referer());
