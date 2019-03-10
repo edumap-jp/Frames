@@ -89,7 +89,6 @@ class FramesSchema extends CakeSchema {
 		'modified' => array('type' => 'datetime', 'null' => true, 'default' => null),
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
-			'box_id' => array('column' => 'box_id', 'unique' => 0),
 			'key' => array('column' => 'key', 'unique' => 0),
 			'box_id_2' => array('column' => array('box_id', 'is_deleted', 'weight'), 'unique' => 0)
 		),
