@@ -73,10 +73,10 @@ class FramesSchema extends CakeSchema {
  */
 	public $frames = array(
 		'id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'primary'),
-		'room_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
+		'room_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false, 'key' => 'index'),
 		'box_id' => array('type' => 'integer', 'null' => false, 'default' => null, 'unsigned' => false, 'key' => 'index'),
 		'plugin_key' => array('type' => 'string', 'null' => false, 'default' => null, 'collate' => 'utf8_general_ci', 'charset' => 'utf8'),
-		'block_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false),
+		'block_id' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false, 'key' => 'index'),
 		'key' => array('type' => 'string', 'null' => false, 'default' => null, 'key' => 'index', 'collate' => 'utf8_general_ci', 'comment' => 'フレームKey', 'charset' => 'utf8'),
 		'header_type' => array('type' => 'string', 'null' => false, 'default' => 'default', 'collate' => 'utf8_general_ci', 'comment' => 'フレームのテーマタイプ', 'charset' => 'utf8'),
 		'weight' => array('type' => 'integer', 'null' => true, 'default' => null, 'unsigned' => false, 'comment' => '表示順序'),
@@ -90,7 +90,9 @@ class FramesSchema extends CakeSchema {
 		'indexes' => array(
 			'PRIMARY' => array('column' => 'id', 'unique' => 1),
 			'key' => array('column' => 'key', 'unique' => 0),
-			'box_id_2' => array('column' => array('box_id', 'is_deleted', 'weight'), 'unique' => 0)
+			'box_id_2' => array('column' => array('box_id', 'is_deleted', 'weight'), 'unique' => 0),
+			'block_id' => array('column' => 'block_id', 'unique' => 0),
+			'room_id' => array('column' => array('room_id', 'plugin_key'), 'unique' => 0)
 		),
 		'tableParameters' => array('charset' => 'utf8', 'collate' => 'utf8_general_ci', 'engine' => 'InnoDB')
 	);
