@@ -51,7 +51,9 @@ if (!empty($centerContent)) {
 				<div class="pull-right">
 					<?php echo $this->element('Frames.order_form', array('frame' => $frame)); ?>
 					<?php echo $this->PageLayout->frameSettingLink($frame); ?>
-					<?php echo $this->element('Frames.delete_form', array('frame' => $frame)); ?>
+					<?php if ($containerType === Container::TYPE_MAIN || !SiteSettingUtil::read('App.usage_limit')) : ?>
+						<?php echo $this->element('Frames.delete_form', array('frame' => $frame)); ?>
+					<?php endif; ?>
 				</div>
 			<?php endif; ?>
 		</div>
