@@ -11,6 +11,9 @@
  */
 
 App::uses('FramesAppController', 'Frames.Controller');
+App::uses('CurrentLibPage', 'NetCommons.Lib/Current');
+App::uses('CurrentLibFrame', 'NetCommons.Lib/Current');
+App::uses('CurrentLibRoom', 'NetCommons.Lib/Current');
 
 /**
  * Frames Controller
@@ -123,7 +126,68 @@ class FramesController extends FramesAppController {
 			return $this->throwBadRequest();
 		}
 
+		$parseUrl = parse_url($this->request->referer());
+		if (isset($parseUrl['query'])) {
+			$match = [];
+			if (preg_match('/page_id=([0-9]+)/', $parseUrl['query'], $match)) {
+				$pageId = $match[1];
+				$page = $this->__findPageById($pageId);
+			} elseif (preg_match('/frame_id=([0-9]+)/', $parseUrl['query'], $match)) {
+				$frameId = $match[1];
+				$page = $this->__findPageByFrameId($frameId);
+			}
+			if (!empty($page['Page'])) {
+				$CurrentLibPage = CurrentLibPage::getInstance();
+				if ($CurrentLibPage->isTopPageId($page['Page']['id'])) {
+					$permalink = '/';
+				} else {
+					$CurrentLibRoom = CurrentLibRoom::getInstance();
+					$space = $CurrentLibRoom->findSpaceByRoomId($page['Page']['room_id']);
+					if (! empty($space['Space']['permalink'])) {
+						$permalink = '/' . $space['Space']['permalink'] . '/' . $page['Page']['permalink'];
+					} else {
+						$permalink = '/' . $page['Page']['permalink'];
+					}
+				}
+				return $this->redirect($permalink);
+			}
+		}
 		$this->redirect($this->request->referer());
+	}
+
+/**
+ * frame_idからページを取得
+
+ * @param int|string $frameId フレームID
+ * @return void
+ */
+	private function __findPageByFrameId($frameId) {
+		$CurrentLibFrame = CurrentLibFrame::getInstance();
+		$frame = $CurrentLibFrame->findFrameById($frameId);
+		if (empty($frame['Frame'])) {
+			return false;
+		}
+
+		$CurrentLibPage = CurrentLibPage::getInstance();
+		$box = $CurrentLibPage->findBoxById($frame['Frame']['box_id']);
+		if (empty($box['Box'])) {
+			return false;
+		}
+
+		$pageId = $box['Box']['page_id'];
+		return $this->__findPageById($pageId);
+	}
+
+/**
+ * ページIDからページ情報を取得
+ *
+ * @param int|string $pageId ページID
+ * @return void
+ */
+	private function __findPageById($pageId) {
+		$CurrentLibPage = CurrentLibPage::getInstance();
+		$page = $CurrentLibPage->findPage($pageId);
+		return $page;
 	}
 
 /**
