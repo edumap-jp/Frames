@@ -39,6 +39,14 @@ if (!empty($centerContent)) {
 } else {
 	$frameTitle = h($frame['name']);
 }
+
+//TODO: configにした方が良い。
+$limitPlugins = ['ads'];
+if (in_array($frame['plugin_key'], $limitPlugins, true)) {
+	$usageLimit = ! SiteSettingUtil::read('App.usage_limit');
+} else {
+	$usageLimit = true;
+}
 ?>
 
 <section<?php echo $domId . ' class="frame' . $panelCss . ' plugin-' . strtr($frame['plugin_key'], '_', '-') . '"'; ?>>
@@ -51,8 +59,7 @@ if (!empty($centerContent)) {
 				<div class="pull-right">
 					<?php echo $this->element('Frames.order_form', array('frame' => $frame)); ?>
 					<?php echo $this->PageLayout->frameSettingLink($frame); ?>
-					<?php if (!in_array($containerType, [Container::TYPE_MAJOR, Container::TYPE_MINOR], true) ||
-								!SiteSettingUtil::read('App.usage_limit')) : ?>
+					<?php if ($usageLimit) : ?>
 						<?php echo $this->element('Frames.delete_form', array('frame' => $frame)); ?>
 					<?php endif; ?>
 				</div>
