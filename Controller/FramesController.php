@@ -137,18 +137,7 @@ class FramesController extends FramesAppController {
 				$page = $this->__findPageByFrameId($frameId);
 			}
 			if (!empty($page['Page'])) {
-				$CurrentLibPage = CurrentLibPage::getInstance();
-				if ($CurrentLibPage->isTopPageId($page['Page']['id'])) {
-					$permalink = '/';
-				} else {
-					$CurrentLibRoom = CurrentLibRoom::getInstance();
-					$space = $CurrentLibRoom->findSpaceByRoomId($page['Page']['room_id']);
-					if (! empty($space['Space']['permalink'])) {
-						$permalink = '/' . $space['Space']['permalink'] . '/' . $page['Page']['permalink'];
-					} else {
-						$permalink = '/' . $page['Page']['permalink'];
-					}
-				}
+				$permalink = $this->__getPageRedirectUrl($page);
 				return $this->redirect($permalink);
 			}
 		}
@@ -156,8 +145,30 @@ class FramesController extends FramesAppController {
 	}
 
 /**
- * frame_idからページを取得
+ * ページのリダイレクトURLを取得
+ *
+ * @param array $page ページデータ
+ * @return string
+ */
+	private function __getPageRedirectUrl($page) {
+		$CurrentLibPage = CurrentLibPage::getInstance();
+		if ($CurrentLibPage->isTopPageId($page['Page']['id'])) {
+			$permalink = '/';
+		} else {
+			$CurrentLibRoom = CurrentLibRoom::getInstance();
+			$space = $CurrentLibRoom->findSpaceByRoomId($page['Page']['room_id']);
+			if (! empty($space['Space']['permalink'])) {
+				$permalink = '/' . $space['Space']['permalink'] . '/' . $page['Page']['permalink'];
+			} else {
+				$permalink = '/' . $page['Page']['permalink'];
+			}
+		}
+		return $permalink;
+	}
 
+/**
+ * frame_idからページを取得
+ *
  * @param int|string $frameId フレームID
  * @return void
  */
