@@ -42,7 +42,8 @@ if (!empty($centerContent)) {
 
 //TODO: configにした方が良い。
 $limitPlugins = ['ads'];
-if (in_array($frame['plugin_key'], $limitPlugins, true)) {
+if (in_array($frame['plugin_key'], $limitPlugins, true) &&
+		! Current::allowSystemPlugin('site_manager')) {
 	$usageLimit = ! SiteSettingUtil::read('App.usage_limit');
 } else {
 	$usageLimit = true;
