@@ -7,6 +7,9 @@
  * @link http://www.netcommons.org NetCommons Project
  * @license http://www.netcommons.org/license.txt NetCommons License
  */
+
+//TODO: configにした方が良い。
+$limitPlugins = ['ads'];
 ?>
 <section class="modal fade" id="add-plugin-<?php echo (int)$boxId; ?>" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog">
@@ -20,6 +23,8 @@
 				<?php if ($plugins = Current::read('PluginsRoom')) : ?>
 				<div class="list-group">
 					<?php foreach ($plugins as $plugin) : ?>
+						<?php if (! in_array($plugin['Plugin']['key'], $limitPlugins, true) ||
+										Current::allowSystemPlugin('site_manager')) : ?>
 						<article class="list-group-item clearfix">
 							<?php echo $this->NetCommonsForm->create(
 									'FrameAdd' . $plugin['Plugin']['id'], array('type' => 'post', 'url' => '/frames/frames/add')
@@ -71,6 +76,7 @@
 								</div>
 							<?php echo $this->NetCommonsForm->end(); ?>
 						</article>
+						<?php endif; ?>
 					<?php endforeach; ?>
 				</div>
 				<?php endif; ?>
