@@ -47,7 +47,7 @@ if (!empty($centerContent)) {
 			<?php echo $this->PageLayout->getBlockStatus(true); ?>
 			<span><?php echo $frameTitle; ?></span>
 
-			<?php if ($this->PageLayout->hasBoxSetting($box)): ?>
+			<?php if ($this->PageLayout->hasBoxSetting($box) && !empty($frame['box_id'])): ?>
 				<div class="pull-right">
 					<?php echo $this->element('Frames.order_form', array('frame' => $frame)); ?>
 					<?php echo $this->PageLayout->frameSettingLink($frame); ?>
