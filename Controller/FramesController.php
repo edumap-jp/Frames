@@ -88,7 +88,7 @@ class FramesController extends FramesAppController {
 			} elseif (!empty($plugin['Plugin']['default_setting_action'])) {
 				list($controller, $action) = explode('/', $plugin['Plugin']['default_setting_action']);
 			} else {
-				return $this->redirect($this->request->referer());
+				return $this->redirect($this->request->referer(true));
 			}
 
 			$url = array(
@@ -101,7 +101,7 @@ class FramesController extends FramesAppController {
 			return $this->redirect($url);
 		}
 
-		$this->redirect($this->request->referer());
+		$this->redirect($this->request->referer(true));
 	}
 
 /**
@@ -126,7 +126,7 @@ class FramesController extends FramesAppController {
 			return $this->throwBadRequest();
 		}
 
-		$parseUrl = parse_url($this->request->referer());
+		$parseUrl = parse_url($this->request->referer(true));
 		if (isset($parseUrl['query'])) {
 			$match = [];
 			if (preg_match('/page_id=([0-9]+)/', $parseUrl['query'], $match)) {
@@ -141,7 +141,7 @@ class FramesController extends FramesAppController {
 				return $this->redirect($permalink);
 			}
 		}
-		$this->redirect($this->request->referer());
+		$this->redirect($this->request->referer(true));
 	}
 
 /**
@@ -224,7 +224,7 @@ class FramesController extends FramesAppController {
 		if (Hash::get($this->request->data, '_Frame.redirect')) {
 			$url = Hash::get($this->request->data, '_Frame.redirect');
 		} else {
-			$url = $this->request->referer();
+			$url = $this->request->referer(true);
 			$this->NetCommons->setFlashNotification(
 				__d('net_commons', 'Successfully saved.'), array('class' => 'success')
 			);
@@ -259,6 +259,6 @@ class FramesController extends FramesAppController {
 		if (! $this->Frame->saveWeight($frame, $order)) {
 			return $this->throwBadRequest();
 		}
-		$this->redirect($this->request->referer());
+		$this->redirect($this->request->referer(true));
 	}
 }
