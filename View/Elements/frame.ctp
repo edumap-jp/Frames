@@ -39,6 +39,10 @@ if (!empty($centerContent)) {
 } else {
 	$frameTitle = h($frame['name']);
 }
+if (! $frameTitle &&
+		$frame['plugin_key'] === 'ads') {
+	$frameTitle = __d('ads', 'Recommended books');
+}
 
 //TODO: configにした方が良い。
 $limitPlugins = ['ads'];
@@ -54,7 +58,16 @@ if (in_array($frame['plugin_key'], $limitPlugins, true) &&
 	<?php if ($frameTitle || $this->PageLayout->hasBoxSetting($box)) : ?>
 		<div class="panel-heading clearfix">
 			<?php echo $this->PageLayout->getBlockStatus(true); ?>
-			<span><?php echo $frameTitle; ?></span>
+			<?php if ($frame['plugin_key'] === 'ads') : ?>
+				<div class="ads-plugin-title clearfix">
+					<?php echo $frameTitle; ?>
+					<span class="pull-right ads-plugin-by-edumap">
+						by <a href="https://edumap.jp" target="_blank"> edumap</a>
+					</span>
+				</div>
+			<?php else :?>
+				<span><?php echo $frameTitle; ?></span>
+			<?php endif; ?>
 
 			<?php if ($this->PageLayout->hasBoxSetting($box) && !empty($frame['box_id'])): ?>
 				<div class="pull-right">
