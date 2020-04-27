@@ -48,7 +48,7 @@ if (! $frameTitle &&
 $limitPlugins = ['ads'];
 if (in_array($frame['plugin_key'], $limitPlugins, true) &&
 		! Current::allowSystemPlugin('site_manager')) {
-	$usageLimit = ! SiteSettingUtil::read('App.usage_limit');
+	$usageLimit = ! SiteSettingUtil::read('App.display_ads');
 } else {
 	$usageLimit = true;
 }
