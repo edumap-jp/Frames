@@ -122,7 +122,7 @@ $frame = Hash::merge($frame, $frameLang);
 				</div>
 			<?php endif; ?>
 
-			<button type="submit" class="btn btn-default" ng-click="sending=true" ng-disabled="sending" onclick="submit()">
+			<button type="submit" class="btn btn-default" ng-click="sending=true" ng-disabled="sending">
 				<?php echo __d('net_commons', 'OK'); ?>
 			</button>
 		<?php echo $this->NetCommonsForm->end(); ?>
