@@ -44,13 +44,12 @@ if (! $frameTitle &&
 	$frameTitle = __d('ads', 'Recommended books');
 }
 
-//TODO: configにした方が良い。
-$limitPlugins = ['ads'];
+$limitPlugins = explode(',', SiteSettingUtil::read('App.limit_plugins', 'ads,links_to_portal'));
 if (in_array($frame['plugin_key'], $limitPlugins, true) &&
 		! Current::allowSystemPlugin('site_manager')) {
-	$usageLimit = ! SiteSettingUtil::read('App.usage_limit');
+	$delLinkOn = ! (bool)SiteSettingUtil::read('App.usage_limit');
 } else {
-	$usageLimit = true;
+	$delLinkOn = true;
 }
 ?>
 
@@ -73,7 +72,7 @@ if (in_array($frame['plugin_key'], $limitPlugins, true) &&
 				<div class="pull-right">
 					<?php echo $this->element('Frames.order_form', array('frame' => $frame)); ?>
 					<?php echo $this->PageLayout->frameSettingLink($frame); ?>
-					<?php if ($usageLimit) : ?>
+					<?php if ($delLinkOn) : ?>
 						<?php echo $this->element('Frames.delete_form', array('frame' => $frame)); ?>
 					<?php endif; ?>
 				</div>

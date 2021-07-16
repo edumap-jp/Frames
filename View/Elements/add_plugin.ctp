@@ -8,8 +8,7 @@
  * @license http://www.netcommons.org/license.txt NetCommons License
  */
 
-//TODO: configにした方が良い。
-$limitPlugins = ['ads'];
+$limitPlugins = explode(',', SiteSettingUtil::read('App.limit_plugins', 'ads,links_to_portal'));
 ?>
 <section class="modal fade" id="add-plugin-<?php echo (int)$boxId; ?>" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog">
